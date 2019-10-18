@@ -1,0 +1,22 @@
+# -*- coding: utf-8 -*-
+"""Example to use python-masscan."""
+import sys
+import xml
+import masscan
+
+try:
+    mas = masscan.PortScanner()
+except masscan.PortScannerError:
+    print("masscan binary not found", sys.exc_info()[0])
+    sys.exit(1)
+except:
+    print("Unexpected error:", sys.exc_info()[0])
+    sys.exit(1)
+
+print("masscan version:", mas.masscan_version)
+try:
+    mas.scan('192.168.1.7', ports='22,80,443,8080,9090,9000,54,23,53')
+except (xml.etree.ElementTree.ParseError,masscan.NetworkConnectionError) as e:
+    print('No live hosts found')
+    pass
+if mas.all_hosts:
